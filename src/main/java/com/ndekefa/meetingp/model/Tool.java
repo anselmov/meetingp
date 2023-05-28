@@ -1,5 +1,7 @@
 package com.ndekefa.meetingp.model;
 
+import java.util.Objects;
+
 public class Tool {
     final ToolType type;
     boolean isMovable;
@@ -15,5 +17,22 @@ public class Tool {
 
     public boolean isMovable() {
         return isMovable;
+    }
+
+    public ToolType getType() {
+        return type;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Tool tool = (Tool) o;
+        return isMovable == tool.isMovable && type == tool.type;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(type, isMovable);
     }
 }
