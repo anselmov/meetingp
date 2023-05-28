@@ -23,6 +23,11 @@ public class MeetingDTOTest {
     public void should_build_15_movable_tools() {
         assertThat(buildMovableTools()).hasSize(15).allMatch(Tool::isMovable);
     }
+
+    @Test
+    public void should_provide_unscheduled_meetings() {
+        assertThat(buildMeetingInputs()).noneMatch(MeetingDTO::isScheduled);
+    }
     public static List<MeetingDTO> buildMeetingInputs() {
         LocalDate currentDate = LocalDate.now();
 
