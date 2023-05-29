@@ -1,18 +1,26 @@
-package com.ndekefa.meetingp.model;
+package com.ndekefa.meetingp.data.entity;
+
+import com.ndekefa.meetingp.model.ToolType;
+import jakarta.persistence.*;
 
 import java.util.Objects;
 
-public class Tool {
+@Entity(name = "tool")
+public class ToolEntity {
 
+    @Id
+    @GeneratedValue
     Integer id;
+
+    @Enumerated(EnumType.STRING)
     final ToolType type;
     boolean isMovable;
 
-    public Tool(ToolType toolType) {
+    public ToolEntity(ToolType toolType) {
         this.type = toolType;
     }
 
-    public Tool(ToolType toolType, boolean isMovable) {
+    public ToolEntity(ToolType toolType, boolean isMovable) {
         this.type = toolType;
         this.isMovable = isMovable;
     }
@@ -29,7 +37,7 @@ public class Tool {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Tool tool = (Tool) o;
+        ToolEntity tool = (ToolEntity) o;
         return type == tool.type;
     }
 

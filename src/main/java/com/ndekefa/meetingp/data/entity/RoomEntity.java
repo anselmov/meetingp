@@ -1,8 +1,9 @@
-package com.ndekefa.meetingp.data.dto;
+package com.ndekefa.meetingp.data.entity;
 
 import com.ndekefa.meetingp.model.Tool;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import lombok.Builder;
 import lombok.Data;
 
@@ -10,12 +11,14 @@ import java.util.List;
 
 @Data
 @Builder
-public class RoomDTO {
+@Entity(name = "room")
+public class RoomEntity {
 
     @Id
     String Id;
     String name;
     int capacity;
-    List<Tool> tools;
+    @OneToMany
+    List<ToolEntity> tools;
     boolean isAvailable;
 }

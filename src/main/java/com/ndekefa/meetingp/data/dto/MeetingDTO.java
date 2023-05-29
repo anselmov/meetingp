@@ -1,7 +1,6 @@
 package com.ndekefa.meetingp.data.dto;
 
 import com.ndekefa.meetingp.model.MeetingType;
-import com.ndekefa.meetingp.model.Room;
 import lombok.Builder;
 import lombok.Data;
 

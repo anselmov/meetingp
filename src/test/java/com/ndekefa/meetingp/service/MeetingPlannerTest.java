@@ -1,10 +1,10 @@
 package com.ndekefa.meetingp.service;
 
 import com.ndekefa.meetingp.data.dto.MeetingDTO;
-import com.ndekefa.meetingp.data.dto.RoomDTO;
+import com.ndekefa.meetingp.data.entity.RoomEntity;
+import com.ndekefa.meetingp.data.entity.ToolEntity;
 import com.ndekefa.meetingp.data.repository.RoomRepository;
 import com.ndekefa.meetingp.model.MeetingType;
-import com.ndekefa.meetingp.model.Tool;
 import com.ndekefa.meetingp.model.ToolType;
 import org.assertj.core.api.Condition;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,7 +21,7 @@ import static org.mockito.Mockito.when;
 /**
  * Scheduling tests using complex criteria.
  * As of 05/2023, the whole algorithm is defined as:
- *
+ * <p>
  * a meeting can be scheduled on weekdays between 8am and 8pm
  * for cleaning purposes, a room should be free 1 hour before it starts
  * a room should contain only 70% of its initial capacity
@@ -37,10 +37,12 @@ class MeetingPlannerTest {
     MeetingPlanner planner;
     @Mock
     RoomRepository roomRepository;
+    ToolService toolService;
 
     @BeforeEach
     void setUp() {
-        planner = new MeetingPlannerImpl(roomRepository);
+        toolService = new ToolService();
+        planner = new MeetingPlannerImpl(roomRepository, toolService);
     }
 
     @Test
@@ -51,23 +53,23 @@ class MeetingPlannerTest {
                 .type(MeetingType.VC)
                 .attendees(8)
                 .build();
-        RoomDTO mostSuitableRoom = vcRoomWithCapacity(14);
+        RoomEntity mostSuitableRoom = vcRoomWithCapacity(14);
         when(roomRepository.findAll()).thenReturn(List.of(
                 vcRoomWithCapacity(20),
                 mostSuitableRoom,
                 vcRoomWithCapacity(4)));
         // when
-        RoomDTO roomByToolsAndCapacity = planner.findRoom(meetingVC8);
+        RoomEntity roomByToolsAndCapacity = planner.findRoom(meetingVC8);
 
         // then
         assertThat(roomByToolsAndCapacity).isNotNull();
         assertThat(roomByToolsAndCapacity.getTools()).containsExactlyInAnyOrder(
-                new Tool(ToolType.SCREEN, false),
-                new Tool(ToolType.CONFERENCE_PHONE, false),
-                new Tool(ToolType.WEBCAM, false)
+                new ToolEntity(ToolType.SCREEN, false),
+                new ToolEntity(ToolType.CONFERENCE_PHONE, false),
+                new ToolEntity(ToolType.WEBCAM, false)
         );
 
-        Condition<RoomDTO> withLimitedCapacity = new Condition<>(
+        Condition<RoomEntity> withLimitedCapacity = new Condition<>(
                 r -> r.getCapacity() * .7 >= meetingVC8.getAttendees(),
                 "with room for 70% of initial capacity"
         );
@@ -75,12 +77,12 @@ class MeetingPlannerTest {
         assertThat(roomByToolsAndCapacity).isEqualTo(mostSuitableRoom);
     }
 
-    private static RoomDTO vcRoomWithCapacity(int capacity) {
-        return RoomDTO.builder().capacity(capacity).tools(
+    private static RoomEntity vcRoomWithCapacity(int capacity) {
+        return RoomEntity.builder().capacity(capacity).tools(
                 List.of(
-                        new Tool(ToolType.SCREEN, false),
-                        new Tool(ToolType.CONFERENCE_PHONE, false),
-                        new Tool(ToolType.WEBCAM, false))).build();
+                        new ToolEntity(ToolType.SCREEN, false),
+                        new ToolEntity(ToolType.CONFERENCE_PHONE, false),
+                        new ToolEntity(ToolType.WEBCAM, false))).build();
     }
 
     @Test

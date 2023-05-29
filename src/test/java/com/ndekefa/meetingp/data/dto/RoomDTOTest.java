@@ -1,6 +1,7 @@
 package com.ndekefa.meetingp.data.dto;
 
-import com.ndekefa.meetingp.model.Tool;
+import com.ndekefa.meetingp.data.entity.RoomEntity;
+import com.ndekefa.meetingp.data.entity.ToolEntity;
 import com.ndekefa.meetingp.model.ToolType;
 import org.junit.jupiter.api.Test;
 
@@ -9,81 +10,82 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 public class RoomDTOTest {
 
     @Test
     public void should_build_12_available_rooms() {
-        assertThat(buildRooms()).hasSize(12).allMatch(RoomDTO::isAvailable);
+        assertThat(buildRooms()).hasSize(12).allMatch(RoomEntity::isAvailable);
     }
 
-    public static List<RoomDTO> buildRooms() {
-        RoomDTO room1 = RoomDTO.builder().name("E1001").capacity(23).isAvailable(true)
+    public static List<RoomEntity> buildRooms() {
+        RoomEntity room1 = RoomEntity.builder().name("E1001").capacity(23).isAvailable(true)
                 .tools(Collections.emptyList())
                 .build();
-        RoomDTO room2 = RoomDTO.builder()
+
+        RoomEntity room2 = RoomEntity.builder()
                 .name("E1002").capacity(10).isAvailable(true)
                 .tools(Collections.singletonList(
-                        new Tool(ToolType.SCREEN)
+                        new ToolEntity(ToolType.SCREEN)
                 ))
                 .build();
-        RoomDTO room3 = RoomDTO.builder()
+
+        RoomEntity room3 = RoomEntity.builder()
                 .name("E1003").capacity(8).isAvailable(true)
-                .tools(Collections.singletonList(new Tool(ToolType.CONFERENCE_PHONE)))
+                .tools(Collections.singletonList(new ToolEntity(ToolType.CONFERENCE_PHONE)))
                 .build();
 
-        RoomDTO room4 = RoomDTO.builder()
+        RoomEntity room4 = RoomEntity.builder()
                 .name("E1004").capacity(4).isAvailable(true)
-                .tools(Collections.singletonList(new Tool(ToolType.WHITEBOARD)))
+                .tools(Collections.singletonList(new ToolEntity(ToolType.WHITEBOARD)))
                 .build();
 
-        RoomDTO room5 = RoomDTO.builder()
+        RoomEntity room5 = RoomEntity.builder()
                 .name("E2001").capacity(4).isAvailable(true)
                 .tools(Collections.emptyList())
                 .build();
 
-        RoomDTO room6 = RoomDTO.builder()
+        RoomEntity room6 = RoomEntity.builder()
                 .name("E2002").capacity(15).isAvailable(true)
                 .tools(Arrays.asList(
-                        new Tool(ToolType.SCREEN),
-                        new Tool(ToolType.WEBCAM)
+                        new ToolEntity(ToolType.SCREEN),
+                        new ToolEntity(ToolType.WEBCAM)
                 ))
                 .build();
 
-        RoomDTO room7 = RoomDTO.builder()
+        RoomEntity room7 = RoomEntity.builder()
                 .name("E2003").capacity(7).isAvailable(true)
                 .tools(Collections.emptyList())
                 .build();
 
-        RoomDTO room8 = RoomDTO.builder()
+        RoomEntity room8 = RoomEntity.builder()
                 .name("E2004").capacity(9).isAvailable(true)
-                .tools(Collections.singletonList(new Tool(ToolType.WHITEBOARD)))
+                .tools(Collections.singletonList(new ToolEntity(ToolType.WHITEBOARD)))
                 .build();
 
-        RoomDTO room9 = RoomDTO.builder()
+        RoomEntity room9 = RoomEntity.builder()
                 .name("E3001").capacity(13).isAvailable(true)
                 .tools(Arrays.asList(
-                        new Tool(ToolType.SCREEN),
-                        new Tool(ToolType.WEBCAM),
-                        new Tool(ToolType.CONFERENCE_PHONE)
+                        new ToolEntity(ToolType.SCREEN),
+                        new ToolEntity(ToolType.WEBCAM),
+                        new ToolEntity(ToolType.CONFERENCE_PHONE)
                 ))
                 .build();
 
-        RoomDTO room10 = RoomDTO.builder()
+        RoomEntity room10 = RoomEntity.builder()
                 .name("E3002").capacity(8).isAvailable(true)
                 .tools(Collections.emptyList())
                 .build();
 
-        RoomDTO room11 = RoomDTO.builder()
+        RoomEntity room11 = RoomEntity.builder()
                 .name("E3003").capacity(9).isAvailable(true)
                 .tools(Arrays.asList(
-                        new Tool(ToolType.SCREEN),
-                        new Tool(ToolType.CONFERENCE_PHONE)
+                        new ToolEntity(ToolType.SCREEN),
+                        new ToolEntity(ToolType.CONFERENCE_PHONE)
                 ))
                 .build();
 
-        RoomDTO room12 = RoomDTO.builder()
+        RoomEntity room12 = RoomEntity.builder()
                 .name("E3004").capacity(4).isAvailable(true)
                 .tools(Collections.emptyList())
                 .build();

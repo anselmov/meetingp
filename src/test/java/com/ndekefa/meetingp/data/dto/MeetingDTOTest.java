@@ -1,5 +1,6 @@
 package com.ndekefa.meetingp.data.dto;
 
+import com.ndekefa.meetingp.data.entity.ToolEntity;
 import com.ndekefa.meetingp.model.MeetingType;
 import com.ndekefa.meetingp.model.Tool;
 import com.ndekefa.meetingp.model.ToolType;
@@ -21,7 +22,7 @@ public class MeetingDTOTest {
 
     @Test
     public void should_build_15_movable_tools() {
-        assertThat(buildMovableTools()).hasSize(15).allMatch(Tool::isMovable);
+        assertThat(buildMovableTools()).hasSize(15).allMatch(ToolEntity::isMovable);
     }
 
     @Test
@@ -200,19 +201,19 @@ public class MeetingDTOTest {
 
     }
 
-    public static List<Tool> buildMovableTools() {
+    public static List<ToolEntity> buildMovableTools() {
         Map<ToolType, Integer> movableToolQuantities = new HashMap<>();
         movableToolQuantities.put(ToolType.CONFERENCE_PHONE, 4);
         movableToolQuantities.put(ToolType.SCREEN, 5);
         movableToolQuantities.put(ToolType.WEBCAM, 4);
         movableToolQuantities.put(ToolType.WHITEBOARD, 2);
 
-        List<Tool> movableTools = new ArrayList<>();
+        List<ToolEntity> movableTools = new ArrayList<>();
         for (Map.Entry<ToolType, Integer> entry : movableToolQuantities.entrySet()) {
             ToolType toolType = entry.getKey();
             int quantity = entry.getValue();
             for (int i = 0; i < quantity; i++) {
-                movableTools.add(new Tool(toolType, true));
+                movableTools.add(new ToolEntity(toolType, true));
             }
         }
         return movableTools;
