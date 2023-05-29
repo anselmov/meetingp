@@ -6,4 +6,5 @@ public class Room {
     String name;
     int capacity;
     List<Tool> tools;
+
 }

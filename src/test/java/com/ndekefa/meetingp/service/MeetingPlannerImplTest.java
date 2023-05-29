@@ -1,13 +1,11 @@
 package com.ndekefa.meetingp.service;
 
 import com.ndekefa.meetingp.data.dto.MeetingDTO;
-import com.ndekefa.meetingp.data.dto.RoomDTO;
 import com.ndekefa.meetingp.data.dto.RoomDTOTest;
 import com.ndekefa.meetingp.data.entity.RoomEntity;
 import com.ndekefa.meetingp.data.entity.ToolEntity;
 import com.ndekefa.meetingp.data.repository.RoomRepository;
 import com.ndekefa.meetingp.model.MeetingType;
-import com.ndekefa.meetingp.model.Tool;
 import com.ndekefa.meetingp.model.ToolType;
 import org.assertj.core.api.Condition;
 import org.junit.jupiter.api.BeforeEach;

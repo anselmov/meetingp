@@ -7,14 +7,13 @@ import java.util.Objects;
 
 @Entity(name = "tool")
 public class ToolEntity {
-
     @Id
     @GeneratedValue
-    Integer id;
+    private Integer id;
 
     @Enumerated(EnumType.STRING)
-    final ToolType type;
-    boolean isMovable;
+    private final ToolType type;
+    private boolean isMovable;
 
     public ToolEntity(ToolType toolType) {
         this.type = toolType;

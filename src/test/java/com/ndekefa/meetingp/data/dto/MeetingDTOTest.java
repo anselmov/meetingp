@@ -2,7 +2,6 @@ package com.ndekefa.meetingp.data.dto;
 
 import com.ndekefa.meetingp.data.entity.ToolEntity;
 import com.ndekefa.meetingp.model.MeetingType;
-import com.ndekefa.meetingp.model.Tool;
 import com.ndekefa.meetingp.model.ToolType;
 import org.junit.jupiter.api.Test;
 
@@ -10,7 +9,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.*;
 
-import static java.time.LocalDateTime.*;
+import static java.time.LocalDateTime.of;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class MeetingDTOTest {

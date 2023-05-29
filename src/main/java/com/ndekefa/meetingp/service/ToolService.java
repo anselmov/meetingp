@@ -1,24 +1,18 @@
 package com.ndekefa.meetingp.service;
 
-import com.ndekefa.meetingp.data.dto.RoomDTO;
 import com.ndekefa.meetingp.data.entity.ToolEntity;
 import com.ndekefa.meetingp.model.MeetingType;
-import com.ndekefa.meetingp.model.Tool;
 import com.ndekefa.meetingp.model.ToolType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.function.Predicate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Stream;
 
 @Service
 public class ToolService {
-
+    Logger logger = LoggerFactory.getLogger(ToolService.class);
     private List<ToolEntity> movableTools = buildMovableTools(); // TODO: refactor to find from repository
 
     public static List<ToolEntity> buildMovableTools() {
@@ -63,7 +57,7 @@ public class ToolService {
         List<ToolEntity> requiredTools = findRequiredTools(meetingType);
         List<ToolEntity> missing = requiredTools.stream()
                 .filter(tool -> !roomTools.contains(tool))
-                .peek(tool -> System.out.println("missing tool = " + tool.getType()))
+                .peek(tool -> logger.debug("missing tool = " + tool.getType()))
                 .toList();
         if (new HashSet<>(movableTools).containsAll(missing)) {
             return Stream.concat(missing.stream(), roomTools.stream()).toList();
@@ -73,7 +67,7 @@ public class ToolService {
 
     public boolean hasRequiredTools(List<ToolEntity> tools, MeetingType meetingType) {
         List<ToolEntity> requiredTools = findRequiredTools(meetingType);
-        requiredTools.forEach(tool -> System.out.println("required Tool = " + tool.getType()));
+        requiredTools.forEach(tool -> logger.debug("required Tool = " + tool.getType()));
         return new HashSet<>(tools).containsAll(requiredTools);
     }
 }

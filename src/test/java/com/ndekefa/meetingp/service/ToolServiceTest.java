@@ -3,7 +3,6 @@ package com.ndekefa.meetingp.service;
 import com.ndekefa.meetingp.data.dto.MeetingDTO;
 import com.ndekefa.meetingp.data.entity.ToolEntity;
 import com.ndekefa.meetingp.model.MeetingType;
-import com.ndekefa.meetingp.model.Tool;
 import com.ndekefa.meetingp.model.ToolType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
