@@ -17,8 +17,8 @@ curl -X POST -H "Content-Type: application/json" -d '{
 
 Overall, the room search is prioritized from most to least important criteria:
 * capacity : 70% of initial capacity limit is defined in application.properties `com.ndekefa.meetingp.capacity.limit=0.7`
-* tools availability : meeting type is translated to tools requirement
 * reservations : including previous meeting room & cleaning time
+* tools availability : meeting type is translated to tools requirement
 
 ## Oracle Database
 ``
