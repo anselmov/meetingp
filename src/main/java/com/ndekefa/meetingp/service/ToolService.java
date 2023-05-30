@@ -60,7 +60,7 @@ public class ToolService {
                 .peek(tool -> logger.debug("missing tool = " + tool.getType()))
                 .toList();
         if (new HashSet<>(movableTools).containsAll(missing)) {
-            return Stream.concat(missing.stream(), roomTools.stream()).toList();
+            return new ArrayList<>(Stream.concat(missing.stream(), roomTools.stream()).toList());
         }
         return roomTools;
     }

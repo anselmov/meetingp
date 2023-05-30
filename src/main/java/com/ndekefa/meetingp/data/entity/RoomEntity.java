@@ -2,27 +2,30 @@ package com.ndekefa.meetingp.data.entity;
 
 import com.ndekefa.meetingp.model.Reservation;
 import com.ndekefa.meetingp.model.Tool;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity(name = "room")
 public class RoomEntity {
+
     @Id
     @GeneratedValue
-    private String Id;
+    private Integer id;
     private String name;
     private int capacity;
-    @OneToMany
+    @OneToMany(cascade = {CascadeType.ALL})
     private List<ToolEntity> tools;
-    @OneToMany
+    @OneToMany(cascade = {CascadeType.ALL})
     private List<ReservationEntity> reservations;
-    private boolean isAvailable;
+    @Builder.Default
+    private boolean isAvailable = true;
 }

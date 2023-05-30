@@ -14,7 +14,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -51,7 +50,7 @@ class MeetingPlannerTest {
     @BeforeEach
     void setUp() {
         toolService = new ToolService();
-        planner = new MeetingPlannerImpl(roomRepository, toolService);
+        planner = new MeetingPlannerImpl(roomRepository, toolService, 0.7f);
     }
 
     @Test

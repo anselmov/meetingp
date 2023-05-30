@@ -4,15 +4,18 @@ import com.ndekefa.meetingp.model.ToolType;
 import jakarta.persistence.*;
 
 import java.util.Objects;
+import lombok.NoArgsConstructor;
 
 @Entity(name = "tool")
+@NoArgsConstructor
 public class ToolEntity {
     @Id
     @GeneratedValue
     private Integer id;
 
     @Enumerated(EnumType.STRING)
-    private final ToolType type;
+    private ToolType type;
+
     private boolean isMovable;
 
     public ToolEntity(ToolType toolType) {

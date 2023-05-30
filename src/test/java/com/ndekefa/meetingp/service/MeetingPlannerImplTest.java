@@ -15,7 +15,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.*;
-import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
@@ -33,7 +32,7 @@ class MeetingPlannerImplTest {
     @BeforeEach
     void setUp() {
         toolService = new ToolService();
-        planner = new MeetingPlannerImpl(roomRepository, toolService);
+        planner = new MeetingPlannerImpl(roomRepository, toolService, 0.7f);
         toolService.setMovableTools(ToolService.buildMovableTools());
     }
 
@@ -170,27 +169,5 @@ class MeetingPlannerImplTest {
                 new ToolEntity(ToolType.CONFERENCE_PHONE, true),
                 new ToolEntity(ToolType.WEBCAM, true)
         ));
-    }
-
-    @Test
-    // TODO REMOVE
-    public void streamsTest() {
-        List<Integer> mainList = Arrays.asList(1, 2, 3);
-        List<Integer> requiredInts = Arrays.asList(2, 5);
-        List<Integer> movableInts = Arrays.asList(2, 3, 5);
-
-        List<Integer> missing = requiredInts.stream()
-                .filter(integer -> !mainList.contains(integer))
-                .peek(f -> System.out.println("missing = " + f))
-                .toList();
-
-        Optional<Integer> findFirst = missing.stream().filter(movableInts::contains).findFirst();
-        if (findFirst.isPresent()) {
-            System.out.println("First missing number: " + findFirst.get());
-        } else {
-            System.out.println("No number found.");
-        }
-        List<Integer> finalList = Stream.concat(mainList.stream(), missing.stream()).toList();
-        System.out.println("Final List: " + finalList); // 1 2 3 5
     }
 }
