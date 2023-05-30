@@ -79,12 +79,18 @@ class ToolServiceTest {
     @Test
     public void should_find_required_tools_completing_missing_tools_ok() {
         List<ToolEntity> initialTools = List.of(new ToolEntity(ToolType.SCREEN));
+        List<ToolEntity> movableTools = toolService.getMovableTools();
+        long webCamCount = movableTools.stream().filter(toolEntity -> toolEntity.getType().equals(ToolType.WEBCAM)).count();
         List<ToolEntity> expectedTools = List.of(
                 new ToolEntity(ToolType.SCREEN),
                 new ToolEntity(ToolType.WEBCAM),
                 new ToolEntity(ToolType.CONFERENCE_PHONE));
         List<ToolEntity> finalTools = toolService.findRequiredTools(initialTools, MeetingType.VC);
         assertThat(finalTools).containsAll(expectedTools);
+
+        // check if missing tools are removed from movable tools
+        long webCamCount2 = movableTools.stream().filter(toolEntity -> toolEntity.getType().equals(ToolType.WEBCAM)).count();
+        assertThat(webCamCount2).isEqualTo(webCamCount - 1);
     }
 
     @Test

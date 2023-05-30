@@ -37,6 +37,11 @@ public class ToolService {
         this.movableTools = movableTools;
     }
 
+    public List<ToolEntity> getMovableTools() {
+        return movableTools;
+    }
+
+
     List<ToolEntity> findRequiredTools(MeetingType meetingType) {
         return switch (meetingType) {
             case VC ->
@@ -60,9 +65,19 @@ public class ToolService {
                 .peek(tool -> logger.debug("missing tool = " + tool.getType()))
                 .toList();
         if (new HashSet<>(movableTools).containsAll(missing)) {
+            missing.forEach(this::removeMovableTool);
             return new ArrayList<>(Stream.concat(missing.stream(), roomTools.stream()).toList());
         }
         return roomTools;
+    }
+
+    private void removeMovableTool(ToolEntity missing) {
+        boolean removed = movableTools.stream()
+                .filter(movable -> movable.getType() == missing.getType())
+                .findFirst()
+                .map(movableTools::remove)
+                .orElse(false);
+        logger.debug("movable tool " + missing + " removed = " + removed);
     }
 
     public boolean hasRequiredTools(List<ToolEntity> tools, MeetingType meetingType) {
