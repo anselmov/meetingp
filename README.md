@@ -2,16 +2,7 @@
 
 A REST API to schedule meetings !
 
-Supports POST meetings (1 by 1) :
-```
-curl -X POST -H "Content-Type: application/json" -d '{
-"name": "Meeting Name",
-"startDate": "2023-05-20T10:00:00",
-"endDate": "2023-05-20T12:00:00",
-"type": "VC",
-"attendees": 10
-}' http://localhost:8080/meeting
-```
+* Supports POST meetings (1 by 1)
 
 ## The algorithm
 
@@ -31,4 +22,19 @@ docker run -d -p 1521:1521 -e APP_USER=tata -e APP_USER_PASSWORD=password -e ORA
 
 or also curl_test.sh
 
+```
+curl -X POST -H "Content-Type: application/json" -d '{
+"name": "Meeting Name",
+"startDate": "2023-05-20T10:00:00",
+"endDate": "2023-05-20T12:00:00",
+"type": "VC",
+"attendees": 10
+}' http://localhost:8080/meeting
 
+```
+
+Meeting types are :
+- VC : video conference
+- SPEC : sharing knowledge and case studies
+- RS : simple in person meeting
+- RC : meeting with remote peers
