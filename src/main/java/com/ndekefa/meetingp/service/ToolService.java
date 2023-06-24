@@ -1,5 +1,6 @@
 package com.ndekefa.meetingp.service;
 
+import com.ndekefa.meetingp.data.entity.RoomEntity;
 import com.ndekefa.meetingp.data.entity.ToolEntity;
 import com.ndekefa.meetingp.model.MeetingType;
 import com.ndekefa.meetingp.model.ToolType;
@@ -8,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
@@ -41,6 +43,30 @@ public class ToolService {
         return movableTools;
     }
 
+    /**
+     * when required tools for a meeting are missing
+     * try to complete roomTools with movable tools
+     * missing tools are moved from movableTools
+     * return roomTools || roomTools + missing tools
+     */
+    public RoomEntity moveMissingTools(RoomEntity roomEntity, MeetingType meetingType) {
+        roomEntity.setTools(withMissingTools(roomEntity, meetingType));
+        removeToolsFromMovableTools(roomEntity);
+        return roomEntity;
+    }
+
+    private List<ToolEntity> withMissingTools(RoomEntity roomEntity, MeetingType meetingType) {
+        Stream<ToolEntity> missingTools = findMissing(roomEntity, findRequiredTools(meetingType)).stream();
+        Stream<ToolEntity> currentTools = roomEntity.getTools().stream();
+        return Stream.concat(missingTools, currentTools).collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    List<ToolEntity> findMissing(RoomEntity roomEntity, List<ToolEntity> requiredTools) {
+        return requiredTools.stream()
+                .filter(tool -> !roomEntity.getTools().contains(tool))
+                .peek(tool -> logger.debug("missing tool = " + tool))
+                .collect(Collectors.toCollection(ArrayList::new));
+    }
 
     List<ToolEntity> findRequiredTools(MeetingType meetingType) {
         return switch (meetingType) {
@@ -53,36 +79,7 @@ public class ToolService {
         };
     }
 
-    /**
-     * when required tools for a meeting are missing
-     * try to complete roomTools with movable tools
-     * return roomTools || roomTools + missing tools
-     */
-    public List<ToolEntity> findRequiredTools(List<ToolEntity> roomTools, MeetingType meetingType) {
-        List<ToolEntity> requiredTools = findRequiredTools(meetingType);
-        List<ToolEntity> missing = requiredTools.stream()
-                .filter(tool -> !roomTools.contains(tool))
-                .peek(tool -> logger.debug("missing tool = " + tool.getType()))
-                .toList();
-        if (new HashSet<>(movableTools).containsAll(missing)) {
-            missing.forEach(this::removeMovableTool);
-            return new ArrayList<>(Stream.concat(missing.stream(), roomTools.stream()).toList());
-        }
-        return roomTools;
-    }
-
-    private void removeMovableTool(ToolEntity missing) {
-        boolean removed = movableTools.stream()
-                .filter(movable -> movable.getType() == missing.getType())
-                .findFirst()
-                .map(movableTools::remove)
-                .orElse(false);
-        logger.debug("movable tool " + missing + " removed = " + removed);
-    }
-
-    public boolean hasRequiredTools(List<ToolEntity> tools, MeetingType meetingType) {
-        List<ToolEntity> requiredTools = findRequiredTools(meetingType);
-        requiredTools.forEach(tool -> logger.debug("required Tool = " + tool.getType()));
-        return new HashSet<>(tools).containsAll(requiredTools);
+    private void removeToolsFromMovableTools(RoomEntity roomEntity) {
+        roomEntity.getTools().stream().filter(ToolEntity::isMovable).forEach(movableTools::remove);
     }
 }

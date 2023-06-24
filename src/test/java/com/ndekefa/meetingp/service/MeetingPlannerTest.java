@@ -67,7 +67,7 @@ class MeetingPlannerTest {
                 mostSuitableRoom,
                 vcRoomWithCapacity(4)));
         // when
-        RoomEntity roomByToolsAndCapacity = planner.findRoom(meetingVC8);
+        RoomEntity roomByToolsAndCapacity = planner.schedule(meetingVC8).get();
 
         // then
         assertThat(roomByToolsAndCapacity).isNotNull();
@@ -116,7 +116,7 @@ class MeetingPlannerTest {
                         .reservations(List.of(r1)).build()));
 
         assertThatThrownBy(() -> {
-            planner.findRoom(meeting1);
+            planner.schedule(meeting1).get();
         }).isInstanceOf(NoSuchElementException.class);
     }
 

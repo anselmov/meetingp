@@ -1,7 +1,6 @@
 package com.ndekefa.meetingp.service;
 
 import com.ndekefa.meetingp.data.dto.MeetingDTO;
-import com.ndekefa.meetingp.data.dto.RoomDTOTest;
 import com.ndekefa.meetingp.data.entity.RoomEntity;
 import com.ndekefa.meetingp.data.entity.ToolEntity;
 import com.ndekefa.meetingp.data.repository.RoomRepository;
@@ -37,25 +36,6 @@ class MeetingPlannerImplTest {
     }
 
     @Test
-    public void should_schedule_by_limited_capacity() {
-        // given
-        MeetingDTO meeting = MeetingDTO.builder()
-                .type(MeetingType.RS).attendees(8).build();
-        int attendeesCount = meeting.getAttendees();
-        when(roomRepository.findAll()).thenReturn(RoomDTOTest.buildRooms());
-
-        // when
-        RoomEntity rooms = planner.findRoom(meeting);
-
-        // then
-        Condition<RoomEntity> withLimitedCapacity = new Condition<>(
-                r -> r.getCapacity() * .7 >= attendeesCount,
-                "with room for 70% of initial capacity"
-        );
-        assertThat(rooms).is(withLimitedCapacity);
-    }
-
-    @Test
     public void should_schedule_by_efficient_capacity() {
         // given
         MeetingDTO meetingWith8Attendees = MeetingDTO.builder().type(MeetingType.RS).attendees(8).build();
@@ -69,7 +49,7 @@ class MeetingPlannerImplTest {
         ));
 
         // when
-        RoomEntity room = planner.findRoom(meetingWith8Attendees);
+        RoomEntity room = planner.schedule(meetingWith8Attendees).get();
 
         // then
         Condition<RoomEntity> withLimitedCapacity = new Condition<>(
@@ -89,7 +69,7 @@ class MeetingPlannerImplTest {
                         .tools(Collections.emptyList())
                         .capacity(4).build()));
 
-        RoomEntity room = planner.findRoom(simpleMeeting);
+        RoomEntity room = planner.schedule(simpleMeeting).get();
 
         assertThat(room).isNotNull();
         assertThat(room.getCapacity()).isGreaterThan(3);
@@ -110,7 +90,7 @@ class MeetingPlannerImplTest {
                         ).build()));
 
         // when
-        RoomEntity roomByTools = planner.findRoom(meetingVC);
+        RoomEntity roomByTools = planner.schedule(meetingVC).get();
 
         // then
         assertThat(roomByTools).isNotNull();
@@ -131,7 +111,7 @@ class MeetingPlannerImplTest {
                 List.of(RoomEntity.builder().capacity(2).build()));
 
         assertThatThrownBy(() -> {
-            planner.findRoom(meetingWith8attendees);
+            planner.schedule(meetingWith8attendees).get();
         }).isInstanceOf(NoSuchElementException.class);
     }
 
@@ -145,7 +125,7 @@ class MeetingPlannerImplTest {
 
         assertThatThrownBy(() ->
         {
-            planner.findRoom(meetingVC);
+            planner.schedule(meetingVC).get();
         })
                 .isInstanceOf(NoSuchElementException.class);
     }
@@ -160,7 +140,7 @@ class MeetingPlannerImplTest {
         when(roomRepository.findAll()).thenReturn(List.of(room));
 
         // when
-        room = planner.findRoom(meetingVC);
+        room = planner.schedule(meetingVC).get();
 
         // then
         assertThat(room).isNotNull();

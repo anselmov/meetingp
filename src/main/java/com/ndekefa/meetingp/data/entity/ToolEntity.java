@@ -4,6 +4,7 @@ import com.ndekefa.meetingp.model.ToolType;
 import jakarta.persistence.*;
 
 import java.util.Objects;
+
 import lombok.NoArgsConstructor;
 
 @Entity(name = "tool")
@@ -20,6 +21,7 @@ public class ToolEntity {
 
     public ToolEntity(ToolType toolType) {
         this.type = toolType;
+        this.isMovable = true;
     }
 
     public ToolEntity(ToolType toolType, boolean isMovable) {

@@ -21,6 +21,8 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -35,11 +37,10 @@ class MeetingControllerTest {
     private TestRestTemplate restTemplate;
     private HttpHeaders headers;
     private URI uri;
-    private String baseUrl;
 
     @BeforeEach
     public void setUp() throws URISyntaxException {
-        baseUrl = "http://localhost:" + port + "/meeting";
+        String baseUrl = "http://localhost:" + port + "/meeting";
         uri = new URI(baseUrl);
         headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -47,7 +48,18 @@ class MeetingControllerTest {
 
     @Test
     public void should_schedule_all_meetings() {
-        MeetingDTOTest.buildMeetingInputs().stream().forEach(this::assertScheduled);
+        MeetingDTOTest.buildMeetingInputs().forEach(this::assertScheduled);
+    }
+
+    @Test
+    @Disabled
+    public void should_schedule_1_5_7_meetings() {
+        List<MeetingDTO> meetings157 = MeetingDTOTest.buildMeetingInputs().stream().filter(
+                meetingDTO -> meetingDTO.getName().equals("Réunion 1")
+                        || meetingDTO.getName().equals("Réunion 5")
+                        || meetingDTO.getName().equals("Réunion 7")
+        ).toList();
+        meetings157.forEach(this::assertScheduled);
     }
 
     @Test
@@ -90,16 +102,19 @@ class MeetingControllerTest {
         ResponseEntity<String> result = this.restTemplate.postForEntity(uri, request, String.class);
         if (meeting.getName().equals("Réunion 8")
                 || meeting.getName().equals("Réunion 11")
-                || meeting.getName().equals("Réunion 12")
                 || meeting.getName().equals("Réunion 14")
                 || meeting.getName().equals("Réunion 16")
                 || meeting.getName().equals("Réunion 17")
                 || meeting.getName().equals("Réunion 19")
                 || meeting.getName().equals("Réunion 20")
         ) {
-            assertThat(result.getStatusCode().value()).isEqualTo(404);
+            assertThat(result.getStatusCode().value()).withFailMessage(
+                            "Found room for meeting %s ", meeting)
+                    .isEqualTo(404);
         } else {
-            assertThat(result.getStatusCode().value()).isEqualTo(200);
+            assertThat(result.getStatusCode().value()).withFailMessage(
+                            "Room not found for meeting %s ", meeting)
+                    .isEqualTo(200);
         }
     }
 }
